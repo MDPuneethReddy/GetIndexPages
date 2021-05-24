@@ -10,7 +10,7 @@ export const getTotalRecords=(text:string)=>{
 // get browser and page
 export const getPage=async(req:any)=>{
     const USER_AGENT='5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
-    const browser = await puppeteer.launch({headless:true});
+    const browser = await puppeteer.launch({headless:true,args: ['--no-sandbox','--disable-setuid-sandbox']});
     const page = await browser.newPage();
     await page.setUserAgent(USER_AGENT);
     await page.setViewport({
