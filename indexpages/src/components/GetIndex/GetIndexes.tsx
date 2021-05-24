@@ -2,6 +2,7 @@ import { Button, Input, message,Spin, Table } from "antd"
 import axios from "axios"
 import React, { useState } from "react"
 import { getWithExpiry, setWithExpiry } from "../utils/localStorageExpiry"
+import { Helmet } from "react-helmet";
 interface Iprops{
 
 }
@@ -77,6 +78,11 @@ export const GetIndexex:React.FC<Iprops>=(props:Iprops)=>{
     }
     return(
         <>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Index Checker: Get Index pages of the website</title>
+                <meta name="description" content="Index Checker will helps you find out all the index pages of your blog or website easily with just your website name" />
+            </Helmet>
             <h1 style={{textAlign:"center"}}><strong>Get Index pages of the website</strong></h1>
             <label>Enter the URL :</label>
             <Input placeholder="http or https://example.com" value={url} disabled={disable} onChange={(e:any)=>{
