@@ -1,4 +1,5 @@
 import { Button, Input, message,Spin, Table } from "antd"
+import {FacebookOutlined,LinkedinOutlined} from "@ant-design/icons"
 import axios from "axios"
 import React, { useState } from "react"
 import { getWithExpiry, setWithExpiry } from "../utils/localStorageExpiry"
@@ -83,6 +84,8 @@ export const GetIndexex:React.FC<Iprops>=(props:Iprops)=>{
                 <title>Index Checker: Get Index pages of the website</title>
                 <meta name="description" content="Index Checker will helps you find out all the index pages of your blog or website easily with just your website name" />
             </Helmet>
+            <a style={{float:"right"}} href={process.env.REACT_APP_FACEBOOK}><FacebookOutlined  style={{ fontSize: '20px', color: '#08c' }}/></a>
+            <a style={{float:"right"}} href={process.env.REACT_APP_LINKEDIN}><LinkedinOutlined  style={{ fontSize: '20px', color: '#08c' }}/></a>
             <h1 style={{textAlign:"center"}}><strong>Get Index pages of the website</strong></h1>
             <label>Enter the URL :</label>
             <Input placeholder="http or https://example.com" value={url} disabled={disable} onChange={(e:any)=>{
