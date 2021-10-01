@@ -1,5 +1,9 @@
 const puppeteer = require('puppeteer-extra');
-
+import * as socket from "socket.io"
+let io:any;
+// const socketConnection=(server:any)=>{
+//     io=socket(server)
+// }
 // get no of total pages
 export const getTotalRecords=(text:string)=>{
     const temp=text.split(" ")
@@ -36,6 +40,7 @@ export const getAllLinks=async(page:any,allLinks:any)=>{
           await page.click("#pnnext > span:nth-child(2)")
           await page.waitForSelector("#rso > div > div > div > div.yuRUbf > a")
           const newLinks = await page.$$eval("#rso > div > div > div > div.yuRUbf > a", ( am:any) => am.filter((e:any) => e.href).map((e:any) => e.href))
+        //   io.emit("datalinks",newLinks)
           allLinks=allLinks.concat(newLinks)
         }
         else{

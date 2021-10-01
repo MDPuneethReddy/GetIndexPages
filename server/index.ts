@@ -57,6 +57,8 @@ catch(error){
   // console.log({browserKilled: await wasBrowserKilled(browser)});
 }
 })
-app.listen(port,async()=>{
+export const server=
+  app.listen(port,async()=>{
   console.log(`listening on ${port}/api`)
 })
+server.on("error",console.error)
