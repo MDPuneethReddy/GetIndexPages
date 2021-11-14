@@ -28,7 +28,7 @@ export const GetIndexex:React.FC<Iprops>=(props:Iprops)=>{
       const socket = io(backendURL, { transports: ["websocket"] });   
       socket.on("url-links",(urls)=>{
           console.log(urls)
-        setData((prevData:any)=>[...prevData,urls])
+        setData((prevData:any)=>[...prevData,...urls])
       })
       socket.on('disconnect', ()=> {
         console.log("disconnected")
@@ -58,11 +58,9 @@ export const GetIndexex:React.FC<Iprops>=(props:Iprops)=>{
             }} /><br />
             <Button style={{textAlign:"center"}} type="primary" size="small" disabled={disable}  onClick={getAllIndexpages}>Click here !!</Button>
             {loading&&<Spin />}
-            {/* <Table columns={columns} dataSource={data}  pagination={{
-                onChange(current:any) {
-                setPage(current);
-                }
-            }} /> */}
+            <div >
+            <Table columns={columns} dataSource={data}  ></Table>
+            </div>
         </div>
     )
 }
