@@ -1,20 +1,8 @@
 const puppeteer = require('puppeteer-extra');
-import * as socket from "socket.io"
-let io:any;
-// const socketConnection=(server:any)=>{
-//     io=socket(server)
-// }
-// get no of total pages
-export const getTotalRecords=(text:string)=>{
-    const temp=text.split(" ")
-    let value:string
-    temp[0]==="About"? value=temp[1]: value=temp[0]
-    return value
-}
 // get browser and page
-export const getPage=async(req:any)=>{
+export const getPage=async()=>{
     const USER_AGENT='5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
-    const browser = await puppeteer.launch({headless:true,args: ['--no-sandbox','--disable-setuid-sandbox']});
+    const browser = await puppeteer.launch({headless:false,args: ['--no-sandbox','--disable-setuid-sandbox']});
     const page = await browser.newPage();
     await page.setUserAgent(USER_AGENT);
     await page.setViewport({
@@ -34,18 +22,39 @@ export const wasBrowserKilled=async(browser:any)=>{
     const procInfo = await browser.process();
     return !!procInfo.signalCode;
 }
-export const getAllLinks=async(page:any,allLinks:any)=>{
+export const getAllLinks=async(page:any,socket:any)=>{
     while(true){
         if(await page.$("#pnnext > span:nth-child(2)")!==null){
           await page.click("#pnnext > span:nth-child(2)")
           await page.waitForSelector("#rso > div > div > div > div.yuRUbf > a")
           const newLinks = await page.$$eval("#rso > div > div > div > div.yuRUbf > a", ( am:any) => am.filter((e:any) => e.href).map((e:any) => e.href))
-        //   io.emit("datalinks",newLinks)
-          allLinks=allLinks.concat(newLinks)
+          socket.emit("url-links",newLinks)
         }
         else{
           break
         }
     }
-    return allLinks
 }
+export const getAllUrls=async(url:string,socket:any)=>{
+    const site=`site://${url}`
+    let allLinks:any;
+    const {browser,page}=await getPage()
+    try{ 
+      await page.type(".gLFyf.gsfi",site)
+      await page.keyboard.press('Enter')
+      // await page.setRequestInterception(true);
+      await page.waitForSelector("#rso > div > div > div > div.yuRUbf > a");
+      allLinks = await page.$$eval("#rso > div > div > div > div.yuRUbf > a",( am:any) => am.filter((e:any) => e.href).map((e:any )=> e.href))
+      await getAllLinks(page,socket)
+      socket.emit("url-links",allLinks)
+    }
+  catch(error){
+    console.log(error)
+    // console.log({browserKilled: await wasBrowserKilled(browser)});
+  }
+  finally{
+    socket.disconnect()
+    await page.close();
+    await browser.close();
+    
+  }}
